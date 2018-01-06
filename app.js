@@ -2,7 +2,6 @@ let express = require('express')
 let path = require('path')
 let ejs = require('ejs')
 
-let port = 3000
 let app = express()
 
 app.enable('trust proxy')
@@ -23,10 +22,18 @@ let options = {
 app.use(express.static(path.join(__dirname, 'public'), options))
 // engine
 app.engine('html', ejs.renderFile)
-// error handling
+// view engine setup
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
+
+// error handlers
+// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(err.status || 500)
+    res.render('error', {
+        message: err.message,
+        error: err
+    })
 })
 
 // routes
@@ -34,6 +41,18 @@ app.get('/', function(req, res){
     res.send('hello world')
 })
 
-app.listen(port, function(req, res){
-    console.log('DEBUG: express app start at port[' + port + ']......')
+app.get('/java', function (req, res, next) {
+    const java = require('./common/javas')
+    java.syncHashMap()
+    res.send({err: null, data: 'success'})
+})
+
+app.set('port', process.env.PORT || 3000)
+
+let server = app.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + server.address().port)
+})
+
+server.on('Error', function (err) {
+    console.log('APP Error: ' + JSON.stringify(err))
 })

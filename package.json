@@ -1,10 +1,21 @@
 {
-  "name": "nodejs_training",
-  "version": "0.0.1",
-  "private": true,
+  "name": "nodejs-training",
+  "version": "1.0.0",
+  "description": "the demo of nodejs with most favorit package, like express, mongo, angular, java...",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "node",
+    "express",
+    "mongo",
+    "angular",
+    "java"
+  ],
+  "author": "Wulin Sun",
+  "license": "ISC",
   "dependencies": {
     "ejs": "^2.5.7",
     "express": "^4.16.2",
